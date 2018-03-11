@@ -8,3 +8,7 @@ GameJam2018/Assembly-CSharp.csproj
 GameJam2018/Temp/UnityLockfile
 
 *.csproj
+
+GameJam2018/Temp/__Backupscenes/
+
+GameJam2018/Temp/
