@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class networkComponent : MonoBehaviour {
-
+	
 	public List<GameObject> connections;
 
 	public HashSet<GameObject> fullNetwork;
@@ -52,7 +52,7 @@ public class networkComponent : MonoBehaviour {
 	}
 
 	void drawConnections(){
-
+		
 		foreach(GameObject node in fullConnections.Keys){
 			if (connections.Contains (node)) {
 				//Update existing lines
@@ -64,12 +64,15 @@ public class networkComponent : MonoBehaviour {
 			} else {
 				//Remove non needed line
 				GameObject.Destroy(fullConnections[node]);
+				fullConnections.Remove(node);
 			}
 		}
+
 		foreach(GameObject node in connections){
 			if(!fullConnections.ContainsKey(node)){
 				//New Line Object
 				GameObject line = new GameObject();
+				line.transform.parent = transform;
 				line.transform.position = transform.position;
 				line.AddComponent<LineRenderer>();
 
@@ -77,13 +80,14 @@ public class networkComponent : MonoBehaviour {
 				LineRenderer lr = line.GetComponent<LineRenderer>();
 				//lr.material = new Material(lazer_material);
 				
-				lr.startWidth = 0.09f;
-				lr.endWidth = 0.09f;
+				lr.startWidth = 0.2f;
+				lr.endWidth = 0.2f;
 				lr.SetPosition(0, transform.position);
 				lr.SetPosition(1, node.transform.position);
 				fullConnections.Add (node, line);
 			}
 		}
+
 	}
 
 	HashSet<GameObject> digInto(GameObject source,HashSet<GameObject> explored){

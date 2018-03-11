@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\emitter.cs" />
+     <Compile Include="Assets\GameDev2018\destructable.cs" />
      <Compile Include="Assets\GameDev2018\Turret\turret.cs" />
      <Compile Include="Assets\GameDev2018\Turret\turret_barrel.cs" />
      <Compile Include="Assets\LiquidPhysics\Scripts\DynamicParticle.cs" />
