@@ -9,7 +9,7 @@ public class lazer_turret : turret {
 	// Use this for initialization
 	void Start () {
 		setPower (5);
-		setRange (1);
+		setRange (0.6f);
 		setFireRate (0.5f);
 	}
 
