@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class testing_follow_mouse : MonoBehaviour {
 
-	bool following = false;
+	bool following = true;
 
 	// Use this for initialization
 	void Start () {

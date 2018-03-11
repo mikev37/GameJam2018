@@ -1,9 +1,12 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\turret_barrel.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\networkComponent.cs">
     <Files>
-      <File FileName="Assets\turret_barrel.cs" Line="43" Column="4" />
-      <File FileName="Assets\testing_follow_mouse.cs" Line="20" Column="17" />
+      <File FileName="Assets\emitter.cs" Line="1" Column="1" />
+      <File FileName="Assets\LiquidPhysics\Scripts\DynamicParticle.cs" Line="1" Column="1" />
+      <File FileName="Assets\LiquidPhysics\Scripts\ParticleGenerator.cs" Line="1" Column="1" />
+      <File FileName="Assets\LiquidPhysics\Shaders\Metaballs_Multiple.shader" Line="1" Column="1" />
+      <File FileName="Assets\networkComponent.cs" Line="61" Column="38" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
