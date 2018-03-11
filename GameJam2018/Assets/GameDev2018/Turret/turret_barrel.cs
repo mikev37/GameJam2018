@@ -8,29 +8,20 @@ public class turret_barrel : MonoBehaviour {
 
 	// CONFIG VALUES
 	float fire_rate = 0.5f;
-	float damage_interval = 1f;
 	bool turret_enabled = true;
 
 	float turret_range = 1;
-	float hit_range = 0.8f;
 
 	int power = 5;
-	public int health = 100;
-	int creep_damage = 5;
 
 	//END CONFIG
 
-	static int c = 0;
-	string turret_name;
-
 	public List<GameObject> targets = new List<GameObject>();
 	float next_fire = 0f;
-	float next_damage = 0f;
 
 	// Use this for initialization
 	void Start () {
-		turret_name = "Turret #" + c;
-		c++;
+		
 	}
 
 	// Set a new enabled state for the turret
@@ -43,24 +34,6 @@ public class turret_barrel : MonoBehaviour {
 		return turret_enabled;
 	}
 
-	//Turret Died
-	void die(){
-		Debug.Log (turret_name+" has died!!");
-	}
-
-	// Process an attack from another entity
-	void attack(int damage){
-		health -= damage;
-		if(health <= 0){
-			die ();
-		}
-	}
-
-	// Trigger when creep hits
-	void creepHit(){
-		attack (creep_damage);
-	}
-
 	//Fire at a target
 	void shootAt(GameObject target){
 		if(next_fire <= 0){
@@ -71,7 +44,8 @@ public class turret_barrel : MonoBehaviour {
 			//Reset the next fire counter
 			next_fire = fire_rate;
 
-			transform.LookAt (target_pos);
+
+			transform.GetChild(0).transform.LookAt (target_pos);
 
 			//New Line Object
 			GameObject myLine = new GameObject();
@@ -155,23 +129,7 @@ public class turret_barrel : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		next_damage -= Time.deltaTime;
 		next_fire -= Time.deltaTime;
 		autoShootAtNearby ();
-
-		if(next_damage <= 0){
-			next_damage = damage_interval;
-			foreach(GameObject target in targets){
-
-				//Sync the Z Indicies before distance computation
-				Vector3 tmp_target = target.transform.position;
-				tmp_target.z = transform.position.z;
-
-				Debug.Log ("HIT: "+Vector3.Distance (tmp_target, transform.position));
-				if(Vector3.Distance(tmp_target, transform.position) <= hit_range){
-					creepHit ();
-				}
-			}
-		}
 	}
 }
