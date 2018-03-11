@@ -1,24 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class turret_barrel : MonoBehaviour {
 	public Material lazer_material;
 
 	// CONFIG VALUES
 	float fire_rate = 0.5f;
+	float damage_interval = 1f;
 	bool turret_enabled = true;
-	float turret_range = 5;
 
-	//ED CONFIG
+	float turret_range = 1;
+	float hit_range = 0.8f;
+
+	int power = 5;
+	public int health = 100;
+	int creep_damage = 5;
+
+	//END CONFIG
+
+	static int c = 0;
+	string turret_name;
 
 	public List<GameObject> targets = new List<GameObject>();
 	float next_fire = 0f;
+	float next_damage = 0f;
 
 	// Use this for initialization
 	void Start () {
-
-
+		turret_name = "Turret #" + c;
+		c++;
 	}
 
 	// Set a new enabled state for the turret
@@ -29,6 +41,24 @@ public class turret_barrel : MonoBehaviour {
 	// Get Current state ENABLED|DISABLED
 	bool isEnabled(){
 		return turret_enabled;
+	}
+
+	//Turret Died
+	void die(){
+		Debug.Log (turret_name+" has died!!");
+	}
+
+	// Process an attack from another entity
+	void attack(int damage){
+		health -= damage;
+		if(health <= 0){
+			die ();
+		}
+	}
+
+	// Trigger when creep hits
+	void creepHit(){
+		attack (creep_damage);
 	}
 
 	//Fire at a target
@@ -60,6 +90,7 @@ public class turret_barrel : MonoBehaviour {
 
 			//Remove the drawn line
 			GameObject.Destroy(myLine, 0.05f);
+			target.SendMessage("attack", power);
 		}
 	}
 
@@ -70,14 +101,28 @@ public class turret_barrel : MonoBehaviour {
 		col.radius = turret_range;
 	}
 
+	//Set a new fire rate for the turret
+	void setFireRate(float rate){
+		fire_rate = rate;
+	}
+
+	//Set a new power level for the turret
+	void setPower(int p){
+		power = p;
+	}
+
 	//When another object enters the range of the turret
 	void OnTriggerEnter2D(Collider2D other) {
-		targets.Add(other.gameObject);
+		if(other.gameObject.layer == 8){
+			targets.Add(other.gameObject);
+		}
 	}
 
 	//When another object exits the range of the turret
 	void OnTriggerExit2D(Collider2D other) {
-		targets.Remove(other.gameObject);
+		if (other.gameObject.layer == 8) {
+			targets.Remove (other.gameObject);
+		}
 	}
 
 	// Auto Fires are any known targets which are nearby
@@ -90,8 +135,16 @@ public class turret_barrel : MonoBehaviour {
 					closest = target;
 					continue;
 				}
+				//Sync Z Indisies 
+				Vector3 tmp_target = target.transform.position;
+				tmp_target.z = transform.position.z;
+
+				Vector3 tmp_closest = closest.transform.position;
+				tmp_closest.z = transform.position.z;
+
 				//Check if target is closer than the default
-				if(Vector3.Distance(transform.position, target.transform.position) < Vector3.Distance(transform.position, closest.transform.position)){
+				if(Vector3.SqrMagnitude(transform.position)-Vector3.SqrMagnitude(tmp_target) < 
+					Vector3.SqrMagnitude(transform.position)-Vector3.SqrMagnitude(tmp_closest)){
 					closest = target;
 				}
 			}
@@ -102,7 +155,23 @@ public class turret_barrel : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		next_damage -= Time.deltaTime;
 		next_fire -= Time.deltaTime;
 		autoShootAtNearby ();
+
+		if(next_damage <= 0){
+			next_damage = damage_interval;
+			foreach(GameObject target in targets){
+
+				//Sync the Z Indicies before distance computation
+				Vector3 tmp_target = target.transform.position;
+				tmp_target.z = transform.position.z;
+
+				Debug.Log ("HIT: "+Vector3.Distance (tmp_target, transform.position));
+				if(Vector3.Distance(tmp_target, transform.position) <= hit_range){
+					creepHit ();
+				}
+			}
+		}
 	}
 }
