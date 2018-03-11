@@ -7,6 +7,7 @@ public class networkComponent : MonoBehaviour {
 	public List<GameObject> connections;
 
 	public HashSet<GameObject> fullNetwork;
+	public Dictionary<GameObject, GameObject> fullConnections;
 
 	public List<GameObject> copyNetwork;
 
@@ -20,6 +21,7 @@ public class networkComponent : MonoBehaviour {
 		connections = new List<GameObject> ();
 		copyNetwork = new List<GameObject> ();
 		fullNetwork = new HashSet<GameObject> ();
+		fullConnections = new Dictionary<GameObject, GameObject> ();
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
@@ -47,6 +49,41 @@ public class networkComponent : MonoBehaviour {
 			copyNetwork.Add (go);
 		}
 
+	}
+
+	void drawConnections(){
+
+		foreach(GameObject node in fullConnections.Keys){
+			if (connections.Contains (node)) {
+				//Update existing lines
+				LineRenderer line = fullConnections[node].GetComponent<LineRenderer>();
+
+				line.SetPosition (0, transform.position);
+				line.SetPosition (1, node.transform.position);
+
+			} else {
+				//Remove non needed line
+				GameObject.Destroy(fullConnections[node]);
+			}
+		}
+		foreach(GameObject node in connections){
+			if(!fullConnections.ContainsKey(node)){
+				//New Line Object
+				GameObject line = new GameObject();
+				line.transform.position = transform.position;
+				line.AddComponent<LineRenderer>();
+
+				//Render the line with the lazer Material
+				LineRenderer lr = line.GetComponent<LineRenderer>();
+				//lr.material = new Material(lazer_material);
+				
+				lr.startWidth = 0.09f;
+				lr.endWidth = 0.09f;
+				lr.SetPosition(0, transform.position);
+				lr.SetPosition(1, node.transform.position);
+				fullConnections.Add (node, line);
+			}
+		}
 	}
 
 	HashSet<GameObject> digInto(GameObject source,HashSet<GameObject> explored){
@@ -77,6 +114,7 @@ public class networkComponent : MonoBehaviour {
 		if (updateTimer <= 0) {
 			updateTimer = updateMyInterval;
 			CalculateFullConnections ();
+			drawConnections ();
 		} else {
 			updateTimer -= Time.deltaTime;
 		}
