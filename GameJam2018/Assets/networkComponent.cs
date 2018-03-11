@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class networkComponent : MonoBehaviour {
-
+	public bool destination;
+	public bool source;
 	public List<GameObject> connections;
 
 	public HashSet<GameObject> fullNetwork;
