@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class networkComponent : MonoBehaviour {
-	public bool destination;
-	public bool source;
+	public static double money = 0;
+	public double copyMoney = 0;
 	public List<GameObject> connections;
-
+	public string type;
 	public HashSet<GameObject> fullNetwork;
 	public Dictionary<GameObject, GameObject> fullConnections;
 
@@ -44,14 +44,13 @@ public class networkComponent : MonoBehaviour {
 	void CalculateFullConnections(){
 		fullNetwork.Clear ();
 		fullNetwork = digInto (gameObject,fullNetwork);
-		Debug.Log ("FULL NETWORK " + fullNetwork.Count);
+		//Debug.Log ("FULL NETWORK " + fullNetwork.Count);
 		copyNetwork.Clear();
 		foreach(GameObject go in fullNetwork){
 			copyNetwork.Add (go);
 		}
 
 	}
-
 	void drawConnections(){
 
 		foreach(GameObject node in fullConnections.Keys){
@@ -88,7 +87,7 @@ public class networkComponent : MonoBehaviour {
 	}
 
 	HashSet<GameObject> digInto(GameObject source,HashSet<GameObject> explored){
-		Debug.Log (source.ToString() + explored.Count.ToString());
+		//Debug.Log (source.ToString() + explored.Count.ToString());
 		HashSet<GameObject> output = new HashSet<GameObject>();
 		networkComponent nC = source.GetComponent<networkComponent> ();
 		if (nC == null) {
@@ -100,13 +99,29 @@ public class networkComponent : MonoBehaviour {
 			if (!explored.Contains (go)) {
 				explored.Add (go);
 				output.UnionWith(digInto (go, explored));
-				Debug.Log ("OUTPUT SIZE " + output.Count); 
+				//Debug.Log ("OUTPUT SIZE " + output.Count); 
 			}
 		}
 	
 		return output;
 	}
 
+	void testHarvester(){
+		
+
+		if (type == "harvester") {
+			//Debug.Log ("Chicken Testing: "+type.ToString());
+			//Search through all connections and see how many are resources
+			foreach (GameObject go in connections) {
+				networkComponent nC = go.GetComponent<networkComponent> ();
+				//Debug.Log ("Network Type: "+nC.type);
+				if (nC.type == "resource") {
+					money += .1;
+					copyMoney = money;
+				}
+			}
+		}
+	}
 
 
 	// Update is called once per frame
@@ -116,6 +131,7 @@ public class networkComponent : MonoBehaviour {
 			updateTimer = updateMyInterval;
 			CalculateFullConnections ();
 			drawConnections ();
+			testHarvester ();
 		} else {
 			updateTimer -= Time.deltaTime;
 		}
