@@ -6,10 +6,15 @@ public class CommandModule : Module {
 
 	public override void processOnGrid(NetworkComponent network){
 		foreach (GameObject go in network.fullNetwork) {
-			if (go.GetComponent<Module> () != null && go != gameObject) {
-				if (go.GetComponent<Module> () is CommandModule)
+			if (go.GetComponent<Module> () != null) {
+				Debug.Log ("Activating "+ go.GetComponent<Module>().ToString());
+
+				if (go.GetComponent<Module> () is CommandModule) {
+					Debug.Log ("Skipping");
 					continue;
-				go.GetComponent<Module> ().processOnGrid (network);
+				
+				}
+				go.GetComponent<Module> ().processOnGrid (go.GetComponent<NetworkComponent>());
 			}
 		}
 	}

@@ -127,6 +127,7 @@ public class NetworkComponent : MonoBehaviour {
 	public void testCommand(){
 		if (GetComponent<CommandModule>() != null) {
 			GetComponent<CommandModule> ().processOnGrid (this);
+			Debug.Log ("Command center active");
 		}
 	}
 
