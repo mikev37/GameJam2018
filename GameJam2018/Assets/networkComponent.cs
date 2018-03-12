@@ -110,7 +110,7 @@ public class networkComponent : MonoBehaviour {
 		return output;
 	}
 
-	void testHarvester(){
+	public void testHarvester(){
 		
 
 		if (type == "harvester") {
@@ -126,14 +126,9 @@ public class networkComponent : MonoBehaviour {
 			}
 		}
 	}
-	void testCommand(){
-		if (type == "command") {
-			//Search through all connections and find which ones are harvesters
-			foreach (GameObject go in fullNetwork) {
-				networkComponent nC = go.GetComponent<networkComponent> ();
-				Debug.Log (go);
-				nC.testHarvester ();
-			}
+	public void testCommand(){
+		if (GetComponent<CommandModule> != null) {
+			GetComponent<CommandModule>().process
 		}
 	}
 
