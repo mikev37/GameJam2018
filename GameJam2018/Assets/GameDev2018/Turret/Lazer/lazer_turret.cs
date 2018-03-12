@@ -6,11 +6,15 @@ using UnityEngine.Events;
 public class lazer_turret : turret {
 	public Material lazer_material;
 
+
+
+	public float range,fireRate,width;
+
 	// Use this for initialization
 	void Start () {
 		setPower (5);
-		setRange (0.6f);
-		setFireRate (0.5f);
+		setRange (range);
+		setFireRate (fireRate);
 	}
 
 	//Fire at a target
@@ -35,8 +39,8 @@ public class lazer_turret : turret {
 			lr.material = new Material(lazer_material);
 			start.z += 0.02f;
 			target_pos.z += 0.02f;
-			lr.startWidth = 0.045f;
-			lr.endWidth = 0.045f;
+			lr.startWidth = width;
+			lr.endWidth = width;
 			lr.SetPosition(0, start);
 			lr.SetPosition(1, target_pos);
 

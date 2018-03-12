@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class destructable : MonoBehaviour {
-
+	public bool shrikable = false;
 	// CONFIG VALUES
 	float damage_interval = 1f;
 	public int health = 100;
+	public int healthMax = 100;
 	public int creep_damage = 5;
 	public float hit_range = 0.8f;	
 
@@ -29,6 +30,9 @@ public class destructable : MonoBehaviour {
 	// Process an attack from another entity
 	bool attack(int damage){
 		health -= damage;
+		if (shrikable) {
+			transform.localScale *= 1f * health / healthMax;
+		}
 		if(health <= 0){
 			die ();
 			return true;

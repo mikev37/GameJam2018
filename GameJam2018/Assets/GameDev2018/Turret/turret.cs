@@ -5,6 +5,8 @@ using UnityEngine.Events;
 
 public abstract class turret : MonoBehaviour {
 
+	public float boost; //firerate boost from booster
+
 	// CONFIG VALUES
 	bool turret_enabled = true;
 	protected float fire_rate = 0.5f;
@@ -90,7 +92,10 @@ public abstract class turret : MonoBehaviour {
 
 	// Update is called once per frame
 	protected void Update () {
-		next_fire -= Time.deltaTime;
+		next_fire -= Time.deltaTime * (1 + boost);
 		autoShootAtNearby ();
+		boost -= Time.deltaTime;
+		if (boost <= 0)
+			boost = 0;
 	}
 }
