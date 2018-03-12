@@ -126,6 +126,16 @@ public class networkComponent : MonoBehaviour {
 			}
 		}
 	}
+	void testCommand(){
+		if (type == "command") {
+			//Search through all connections and find which ones are harvesters
+			foreach (GameObject go in fullNetwork) {
+				networkComponent nC = go.GetComponent<networkComponent> ();
+				Debug.Log (go);
+				nC.testHarvester ();
+			}
+		}
+	}
 
 
 	// Update is called once per frame
@@ -135,7 +145,7 @@ public class networkComponent : MonoBehaviour {
 			updateTimer = updateMyInterval;
 			CalculateFullConnections ();
 			drawConnections ();
-			testHarvester ();
+			testCommand ();
 		} else {
 			updateTimer -= Time.deltaTime;
 		}
