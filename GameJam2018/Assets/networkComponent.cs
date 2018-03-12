@@ -2,19 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class networkComponent : MonoBehaviour {
+public class NetworkComponent : MonoBehaviour {
 	public static double money = 0;
 	public double copyMoney = 0;
+
+	//neighbors
 	public List<GameObject> connections;
-	public string type;
-	public HashSet<GameObject> fullNetwork;
+	//map of neighbors to lines rendered
 	public Dictionary<GameObject, GameObject> fullConnections;
 
+	public Material lineMaterial;
+	public Color lineColor = Color.white;
+
+	//whether this node connects neighbors to itself
+	public bool connect = true;
+	public bool overrideConect = false;
+
+	//the network as accessed from this node.
+	public HashSet<GameObject> fullNetwork;
+
+	//output read only network
 	public List<GameObject> copyNetwork;
 
+	//update variables
 	public float updateMyInterval = .1f;
-
-	public float updateTimer = 0f;
+	float updateTimer = 0f;
 
 
 	// Use this for initialization
@@ -26,11 +38,12 @@ public class networkComponent : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
+		if (!connect)
+			return;
 		if (other.gameObject.layer != 10)
 			return;
-
-		connections.Add (other.gameObject);
-
+		if(other.gameObject.GetComponent<NetworkComponent>().connect || overrideConect)
+			connections.Add (other.gameObject);
 	}
 
 	void OnTriggerExit2D(Collider2D other){
@@ -78,8 +91,9 @@ public class networkComponent : MonoBehaviour {
 
 				//Render the line with the lazer Material
 				LineRenderer lr = line.GetComponent<LineRenderer>();
-				//lr.material = new Material(lazer_material);
-				
+				lr.material = lineMaterial;
+				lineColor.a = 1f;
+				lr.material.color = node.GetComponent<NetworkComponent>().lineColor;
 				lr.startWidth = 0.2f;
 				lr.endWidth = 0.2f;
 				lr.SetPosition(0, transform.position);
@@ -93,7 +107,7 @@ public class networkComponent : MonoBehaviour {
 	HashSet<GameObject> digInto(GameObject source,HashSet<GameObject> explored){
 		//Debug.Log (source.ToString() + explored.Count.ToString());
 		HashSet<GameObject> output = new HashSet<GameObject>();
-		networkComponent nC = source.GetComponent<networkComponent> ();
+		NetworkComponent nC = source.GetComponent<NetworkComponent> ();
 		if (nC == null) {
 			return output;
 		}
@@ -109,26 +123,10 @@ public class networkComponent : MonoBehaviour {
 	
 		return output;
 	}
-
-	public void testHarvester(){
 		
-
-		if (type == "harvester") {
-			//Debug.Log ("Chicken Testing: "+type.ToString());
-			//Search through all connections and see how many are resources
-			foreach (GameObject go in connections) {
-				networkComponent nC = go.GetComponent<networkComponent> ();
-				//Debug.Log ("Network Type: "+nC.type);
-				if (nC.type == "resource") {
-					money += .1;
-					copyMoney = money;
-				}
-			}
-		}
-	}
 	public void testCommand(){
-		if (GetComponent<CommandModule> != null) {
-			GetComponent<CommandModule>().process
+		if (GetComponent<CommandModule>() != null) {
+			GetComponent<CommandModule> ().processOnGrid (this);
 		}
 	}
 

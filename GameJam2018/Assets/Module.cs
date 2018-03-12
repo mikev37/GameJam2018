@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class Module : MonoBehaviour {
 
-	protected abstract void processOnGrid();
+	public abstract void processOnGrid(NetworkComponent network);
 }

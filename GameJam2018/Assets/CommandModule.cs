@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class CommandModule : Module {
 
-	protected override void processOnGrid(HashSet<GameObject> fullNetwork){
-		foreach (GameObject go in fullNetwork) {
-			networkComponent nC = go.GetComponent<networkComponent> ();
-			Debug.Log (go);
-			nC.testHarvester ();
+	public override void processOnGrid(NetworkComponent network){
+		foreach (GameObject go in network.fullNetwork) {
+			if (go.GetComponent<Module> () != null && go != gameObject) {
+				if (go.GetComponent<Module> () is CommandModule)
+					continue;
+				go.GetComponent<Module> ().processOnGrid (network);
+			}
 		}
 	}
 
