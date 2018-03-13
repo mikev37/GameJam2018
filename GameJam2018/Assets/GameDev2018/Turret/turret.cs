@@ -80,8 +80,8 @@ public abstract class turret : MonoBehaviour {
 				tmp_closest.z = transform.position.z;
 
 				//Check if target is closer than the default
-				if(Vector3.SqrMagnitude(transform.position)-Vector3.SqrMagnitude(tmp_target) < 
-					Vector3.SqrMagnitude(transform.position)-Vector3.SqrMagnitude(tmp_closest)){
+				if(Vector3.SqrMagnitude(transform.position - tmp_target) < 
+					Vector3.SqrMagnitude(transform.position - tmp_closest)){
 					closest = target;
 				}
 			}
