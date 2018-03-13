@@ -28,7 +28,7 @@ public class destructable : MonoBehaviour {
 	}
 
 	// Process an attack from another entity
-	bool attack(int damage){
+	public bool attack(int damage){
 		health -= damage;
 		if (shrikable) {
 			transform.localScale *= 1f * health / healthMax;
@@ -41,7 +41,7 @@ public class destructable : MonoBehaviour {
 	}
 
 	// Trigger when creep hits
-	bool creepHit(){
+	public bool creepHit(){
 		return attack (creep_damage);
 	}
 

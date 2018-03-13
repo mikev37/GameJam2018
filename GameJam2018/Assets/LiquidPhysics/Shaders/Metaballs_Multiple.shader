@@ -43,19 +43,21 @@ SubShader {
 		half4 texcol= tex2D (_MainTex, i.uv); 
 		half4 finalColor= texcol;					
 		if(texcol.a>0.3){ // This is for the lava effect, easiest one!
-		//	finalColor=half4(texcol.r,texcol.r/9.5,0.0,texcol.a);
+
+			finalColor=half4(texcol.r,texcol.g,texcol.b,texcol.a);
+
 			finalColor=floor(finalColor/0.05)*0.5; //The floor function for the metaball effect play around the 2 values for different effects (use the color preview at the scene!)		    
-	   	}
+	    //	}
 	    //else if(texcol.g>0.3){ //This is for the gas effect		
-		//finalColor=half4(texcol.r,texcol.g,texcol.b,0.5f);// All channels white with some transparency
-		//finalColor=floor(finalColor/0.05)*0.3;  //Blend it in
-		//     finalColor.a=0.5f; // To add some transparency		    
+		//	finalColor=half4(1,1,1,0.5f);// All channels white with some transparency
+		//	finalColor=floor(finalColor/0.05)*0.3;  //Blend it in
+		    finalColor.a=0.5f; // To add some transparency		    
 	    //}	    
 	    //else if(texcol.b>0.3){	//This is for the water effect
-	    		//finalColor=half4(0.0,texcol.b/2.0,texcol.b,0.5);
-				
-				//finalColor.b=floor((finalColor.b/0.1)*0.5);
-		//}	    
+	   // 		finalColor=half4(0.0,texcol.b/2.0,texcol.b,0.5);
+		//		
+		//		finalColor.b=floor((finalColor.b/0.1)*0.5);
+		}	    
 	    return finalColor;
 	}
 	ENDCG
