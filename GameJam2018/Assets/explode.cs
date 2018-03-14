@@ -22,7 +22,7 @@ public class explode : MonoBehaviour {
 		if (transform.localScale.x <= 0) {
 			Destroy (gameObject);
 		}
-		shrinkVector += Vector3.one * 5 * Time.deltaTime;
+		shrinkVector += Vector3.one * 10 * Time.deltaTime;
 		transform.localScale -= shrinkVector * Time.deltaTime * 10;
 	}
 }
