@@ -5,11 +5,9 @@ using UnityEngine.Events;
 
 public class testing_follow_mouse : MonoBehaviour {
 
-	bool following = true;
+	bool following = false;
 	string t_name = "Generic";
-	public int health = 100;
 	static int c = 0;
-	public string debug;
 	public Camera controlCam;
 
 	// Use this for initialization
@@ -23,23 +21,11 @@ public class testing_follow_mouse : MonoBehaviour {
 	void OnMouseDown(){
 		following = !following;
 	}
-
-	void die(){
-		Debug.Log (t_name+" has died!!");
-	}
-
-	void attack(int damage){
-		health -= damage;
-		if(health <= 0){
-			die();
-		}
-	}
-
+		
 	// Update is called once per frame
 	void Update () {
 		if(following){
 			Vector3 mouse = Input.mousePosition;
-			debug = mouse.ToString ();
 			if (controlCam.targetTexture != null) {
 				mouse.x = mouse.x * controlCam.targetTexture.width / Screen.width;
 				mouse.y = mouse.y * controlCam.targetTexture.height / Screen.height;
