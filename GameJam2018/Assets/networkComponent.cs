@@ -5,7 +5,7 @@ using UnityEngine;
 public class NetworkComponent : MonoBehaviour {
 	public static double money = 0;
 	public double copyMoney = 0;
-
+	//sds
 	//neighbors
 	public List<GameObject> connections;
 	//map of neighbors to lines rendered
